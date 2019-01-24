@@ -1,3 +1,9 @@
+## appium
+
+- [appium.pptx](appium.pptx)
+
+
+
 ## 坑
 
 1. 荣耀手机有时可以在`adb devices`中看到，有时看不到
@@ -10,7 +16,7 @@
 
 3. **网上很多教程，包括老外自己都说要开多个appium server在不同端口**， 这个做法是过时的，多个设备也只用开启一个appium。
 
-   > ```json
+   > ```python
    > desired_caps = {
    > 		"uuid": str(uuid.uuid4()),
    > 		"platformName": "Android",
