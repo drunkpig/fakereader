@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hierarchy rotation="0">
+    <android.widget.FrameLayout index="0" text="" class="android.widget.FrameLayout" package="com.jifen.qukan"
+                                content-desc="" checkable="false" checked="false" clickable="false" enabled="true"
+                                focusable="false" focused="false" scrollable="false" long-clickable="false"
+                                password="false" selected="false" bounds="[0,72][1080,1794]" resource-id=""
+                                instance="0">
+        <android.widget.FrameLayout index="0" text="" class="android.widget.FrameLayout" package="com.jifen.qukan"
+                                    content-desc="" checkable="false" checked="false" clickable="false" enabled="true"
+                                    focusable="false" focused="false" scrollable="false" long-clickable="false"
+                                    password="false" selected="false" bounds="[0,72][1080,1794]" resource-id=""
+                                    instance="1">
+            <android.widget.FrameLayout index="0" text="" class="android.widget.FrameLayout" package="com.jifen.qukan"
+                                        content-desc="" checkable="false" checked="false" clickable="false"
+                                        enabled="true" focusable="false" focused="false" scrollable="false"
+                                        long-clickable="false" password="false" selected="false"
+                                        bounds="[0,72][1080,1794]" resource-id="android:id/content" instance="2">
+                <android.widget.LinearLayout index="0" text="" class="android.widget.LinearLayout"
+                                             package="com.jifen.qukan" content-desc="" checkable="false" checked="false"
+                                             clickable="false" enabled="true" focusable="false" focused="false"
+                                             scrollable="false" long-clickable="false" password="false" selected="false"
+                                             bounds="[0,72][1080,1794]" resource-id="com.jifen.qukan:id/a22"
+                                             instance="0">
+                    <android.widget.RelativeLayout index="0" text="" class="android.widget.RelativeLayout"
+                                                   package="com.jifen.qukan" content-desc="" checkable="false"
+                                                   checked="false" clickable="false" enabled="true" focusable="false"
+                                                   focused="false" scrollable="false" long-clickable="false"
+                                                   password="false" selected="false" bounds="[0,72][1080,1794]"
+                                                   resource-id="com.jifen.qukan:id/a23" instance="0">
+                        <android.support.v4.view.ViewPager index="0" text="" class="android.support.v4.view.ViewPager"
+                                                           package="com.jifen.qukan" content-desc="" checkable="false"
+                                                           checked="false" clickable="false" enabled="true"
+                                                           focusable="true" focused="false" scrollable="false"
+                                                           long-clickable="false" password="false" selected="false"
+                                                           bounds="[0,72][1080,1794]"
+                                                           resource-id="com.jifen.qukan:id/a24" instance="0">
+                            <android.widget.RelativeLayout NAF="true" index="0" text=""
+                                                           class="android.widget.RelativeLayout"
+                                                           package="com.jifen.qukan" content-desc="" checkable="false"
+                                                           checked="false" clickable="true" enabled="true"
+                                                           focusable="true" focused="false" scrollable="false"
+                                                           long-clickable="false" password="false" selected="false"
+                                                           bounds="[0,72][1080,1794]" resource-id="" instance="1">
+                                <android.widget.ImageView index="0" text="" class="android.widget.ImageView"
+                                                          package="com.jifen.qukan" content-desc="" checkable="false"
+                                                          checked="false" clickable="false" enabled="true"
+                                                          focusable="false" focused="false" scrollable="false"
+                                                          long-clickable="false" password="false" selected="false"
+                                                          bounds="[0,72][1080,1794]" resource-id="" instance="0"/>
+                            </android.widget.RelativeLayout>
+                        </android.support.v4.view.ViewPager>
+                        <android.widget.ImageView NAF="true" index="1" text="" class="android.widget.ImageView"
+                                                  package="com.jifen.qukan" content-desc="" checkable="false"
+                                                  checked="false" clickable="true" enabled="true" focusable="true"
+                                                  focused="false" scrollable="false" long-clickable="false"
+                                                  password="false" selected="false" bounds="[846,192][990,336]"
+                                                  resource-id="com.jifen.qukan:id/a25" instance="1"/>
+                    </android.widget.RelativeLayout>
+                </android.widget.LinearLayout>
+            </android.widget.FrameLayout>
+        </android.widget.FrameLayout>
+    </android.widget.FrameLayout>
+</hierarchy>

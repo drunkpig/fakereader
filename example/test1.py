@@ -25,6 +25,52 @@ def __close_tips(driver):
 		logger.info("关闭红色提示框")
 		box.click()
 
+def __read_article(driver, screen_w, screen_h, read_tm_ms):
+	"""
+	随机上线翻弄看文章
+	:param driver:
+	:param read_tm_ms:
+	:return:
+	"""
+	min_x = int(screen_w*0.11)
+	max_x = int(screen_w*0.88)
+
+	min_y = int(screen_h*0.15)
+	max_y = int(screen_h*0.6)
+
+	cur_ms = 0
+	while cur_ms < read_tm_ms:
+		min_y_step = int(screen_h*0.05) #y方向最小移动范围
+		max_y_step = int(screen_h*0.1)
+
+		read_stop_ms = random.randint(1,3) #看这么一段时间后下拉
+		start_read_ms = int(time.time())
+		time.sleep(read_stop_ms)
+		action = random.choice(['up', 'down', 'down', 'down', 'down', 'down', 'down']) # up 网页向上， down ,网页向下
+
+		x_begin = random.randint(min_x, max_x)
+		x_stop = random.randint(min_x, max_x)
+
+		y_begin = random.randint(min_y, max_y)
+
+		up_min_y = min_y
+		up_max_y = max(y_begin-random.randint(min_y_step, max_y_step), min_y)
+		y_stop = random.randint(up_min_y, up_max_y)
+
+		# if action=='down':
+		# 	y_stop = random.randint(min(max(y_begin+random.randint(min_y_step, max_y_step), min_y), max_y-1), max_y)
+
+		# logger.info("%s >> (%s, %s) -> (%s, %s)", action, x_begin, y_begin, x_stop, y_stop)
+		# driver.swipe(x_begin, y_begin, x_stop, y_stop, 200)
+
+		driver.swipe(1 / 2 * screen_w, 1 / 2 * screen_h, 1 / 2 * screen_w, 1 / 7 * screen_h, 200)
+		end_read_ms = int(time.time())
+		cur_ms += (end_read_ms-start_read_ms)
+
+	logger.info("阅读一篇文章完毕")
+
+
+
 
 def __run_device(device_name, port, platformVersion):
 	ring_buffer = collections.deque(maxlen=10)  # 防止多次阅读
@@ -53,20 +99,22 @@ def __run_device(device_name, port, platformVersion):
 	refresh_interval = 5 #下拉5次之后刷新一下
 	swip_cnt = 0
 	while True:
-		click_links = ["com.jifen.qukan:id/aas", "com.jifen.qukan:id/adi"]
-		titles = driver.find_elements_by_id("com.jifen.qukan:id/aas")
+		aritcle_group = driver.find_element_by_class_name("android.support.v7.widget.RecyclerView")
+		titles = aritcle_group.find_elements_by_xpath("//android.support.v7.widget.RecyclerView/android.widget.LinearLayout")
 		readed = 0 # 记录这一页真的看了多少个
 		for t in titles:
-			article_title = t.text
+			title_el = t.find_element_by_xpath("//android.widget.LinearLayout/android.widget.TextView")
+			article_title = title_el.text
 			if article_title in ring_buffer:
 				logger.debug("重复文章，跳过%s", article_title)
 				continue
 			else:
 				logger.info("%s %s", device_name, article_title)
 				ring_buffer.append(article_title)
-				t.click()
+				title_el.click()
 				readed += 1
-				driver.press_keycode(keycode=KeyCode.DEVICE_BACK)
+				__read_article(driver, w, h, 31)
+				driver.press_keycode(keycode=KeyCode.DEVICE_BACK)  # 返回
 		if titles is None or readed==0:
 			logger.info("没有发现可读文章，翻滚(%s, %s) -> (%s, %s)", 0, reset_y, top_x, top_y)
 			driver.swipe(0, reset_y, top_x, top_y, 0)
