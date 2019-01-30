@@ -3,6 +3,9 @@ from logging.config import fileConfig
 from appium import webdriver
 import uuid
 import collections
+
+from selenium.common.exceptions import NoSuchElementException
+
 from keycode import KeyCode
 from utils import *
 import threading
@@ -25,6 +28,7 @@ def __close_tips(driver):
 		logger.info("关闭红色提示框")
 		box.click()
 
+
 def __read_article(driver, screen_w, screen_h, read_tm_ms):
 	"""
 	随机上线翻弄看文章
@@ -32,40 +36,33 @@ def __read_article(driver, screen_w, screen_h, read_tm_ms):
 	:param read_tm_ms:
 	:return:
 	"""
-	min_x = int(screen_w*0.11)
-	max_x = int(screen_w*0.88)
-
-	min_y = int(screen_h*0.15)
-	max_y = int(screen_h*0.6)
+	driver.implicitly_wait(4)
 
 	cur_ms = 0
 	while cur_ms < read_tm_ms:
-		min_y_step = int(screen_h*0.05) #y方向最小移动范围
-		max_y_step = int(screen_h*0.1)
-
-		read_stop_ms = random.randint(1,3) #看这么一段时间后下拉
+		read_stop_ms = random.randint(1,2) #看这么一段时间后下拉
 		start_read_ms = int(time.time())
 		time.sleep(read_stop_ms)
-		action = random.choice(['up', 'down', 'down', 'down', 'down', 'down', 'down']) # up 网页向上， down ,网页向下
 
-		x_begin = random.randint(min_x, max_x)
-		x_stop = random.randint(min_x, max_x)
+		webviews = driver.find_elements_by_class_name("android.webkit.WebView")
+		inner_view = None
+		if webviews is not None and len(webviews)==2:
+			inner_view = webviews[1]
+		else:
+			logger.error("可能不是一篇文章，返回")
+			return
 
-		y_begin = random.randint(min_y, max_y)
+		try:
+			like_btn = inner_view.find_element_by_xpath("//android.webkit.WebView/android.view.View[1]/android.view.View[6]")
+			logger.info("发现目标bounds %s", like_btn.location)
+		except  NoSuchElementException as noel:
+			logger.info("没有发现")
 
-		up_min_y = min_y
-		up_max_y = max(y_begin-random.randint(min_y_step, max_y_step), min_y)
-		y_stop = random.randint(up_min_y, up_max_y)
+		driver.swipe(1 / 2 * screen_w, 1 / 2 * screen_h, 1 / 2 * screen_w, 1 / 30 * screen_h, 700)
 
-		# if action=='down':
-		# 	y_stop = random.randint(min(max(y_begin+random.randint(min_y_step, max_y_step), min_y), max_y-1), max_y)
-
-		# logger.info("%s >> (%s, %s) -> (%s, %s)", action, x_begin, y_begin, x_stop, y_stop)
-		# driver.swipe(x_begin, y_begin, x_stop, y_stop, 200)
-
-		driver.swipe(1 / 2 * screen_w, 1 / 2 * screen_h, 1 / 2 * screen_w, 1 / 7 * screen_h, 200)
 		end_read_ms = int(time.time())
 		cur_ms += (end_read_ms-start_read_ms)
+		logger.info("*")
 
 	logger.info("阅读一篇文章完毕")
 
@@ -89,8 +86,9 @@ def __run_device(device_name, port, platformVersion):
 
 	logger.info("%s connect", device_name)
 	driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
-	driver.implicitly_wait(3000)
+	driver.implicitly_wait(4)
 	w, h = get_screen_size(driver)
+	logger.info(f"screen pixes : {w}, {h}")
 	logger.info("%s wait", device_name)
 	logger.info("%s begin work", device_name)
 
@@ -111,9 +109,11 @@ def __run_device(device_name, port, platformVersion):
 			else:
 				logger.info("%s %s", device_name, article_title)
 				ring_buffer.append(article_title)
+				#print(title_el.get_attribute("outerHTML"))
 				title_el.click()
+
 				readed += 1
-				__read_article(driver, w, h, 31)
+				__read_article(driver, w, h, 33)
 				driver.press_keycode(keycode=KeyCode.DEVICE_BACK)  # 返回
 		if titles is None or readed==0:
 			logger.info("没有发现可读文章，翻滚(%s, %s) -> (%s, %s)", 0, reset_y, top_x, top_y)
